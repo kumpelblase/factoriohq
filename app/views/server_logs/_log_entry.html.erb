@@ -1,0 +1,14 @@
+<tr>
+  <td class="text-nowrap"><%= log.timestamp.strftime("%Y-%m-%d %H:%M:%S") %></td>
+  <td>
+    <span class="badge <%= case log.level
+                          when 'info' then 'bg-info'
+                          when 'warn' then 'bg-warning'
+                          when 'error' then 'bg-danger'
+                          else 'bg-secondary'
+                          end %>">
+      <%= log.level.upcase %>
+    </span>
+  </td>
+  <td><%= log.message %></td>
+</tr>

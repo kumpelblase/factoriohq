@@ -1,0 +1,99 @@
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="d-flex align-items-center">
+    <h1 class="me-3"><%= @mod.title %></h1>
+  </div>
+
+  <div class="btn-group">
+    <%= link_to "Back", mods_path, class: "btn btn-outline-secondary" %>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <% if @mod.summary.present? %>
+      <p class="card-text"><%= @mod.summary %></p>
+      <hr>
+    <% end %>
+
+    <div class="row mb-4">
+      <div class="col-md-2">
+        <% unless @mod.thumbnail.nil? %>
+          <div class="thumbnail">
+            <img src="https://assets-mod.factorio.com<%= @mod.thumbnail %>" alt="Thumbnail" class="img-fluid" />
+          </div>
+        <% end %>
+      </div>
+      <div class="col-md-5">
+        <h6 class="text-muted">Information</h6>
+        <dl class="row">
+          <dt class="col-sm-4 mb-2">Owner</dt>
+          <dd class="col-sm-8"><%= @mod.owner %></dd>
+
+          <dt class="col-sm-4 mb-2">Source</dt>
+          <dd class="col-sm-8"><%= link_to @mod.source_url, @mod.source_url unless @mod.source_url.nil? %></dd>
+
+          <dt class="col-sm-4 mb-2">Homepage</dt>
+          <dd class="col-sm-8"><%= link_to @mod.homepage, @mod.homepage unless @mod.homepage.nil? %></dd>
+
+          <dt class="col-sm-4 mb-2">License</dt>
+          <dd class="col-sm-8"><%= @mod.license.title unless @mod.license.nil? %></dd>
+
+          <dt class="col-sm-4 mb-2">Portal Link</dt>
+          <dd class="col-sm-8"><%= link_to @mod.name, "https://mods.factorio.com/mod/#{@mod.name}" %></dd>
+        </dl>
+      </div>
+
+      <div class="col-md-5">
+        <h6 class="text-muted">&nbsp;</h6>
+        <dl class="row">
+          <dt class="col-sm-4 mb-2">Created</dt>
+          <dd class="col-sm-8"><%= @mod.created_at.strftime("%Y-%m-%d") unless @mod.created_at.nil? %></dd>
+
+          <dt class="col-sm-4 mb-2">Latest Version</dt>
+          <dd class="col-sm-8"><%= @mod.latest_release.released_at.strftime("%Y-%m-%d") unless @mod.latest_release.nil? %></dd>
+
+          <dt class="col-sm-4 mb-2">Version</dt>
+          <dd class="col-sm-8"><%= @mod.latest_release.version unless @mod.latest_release.nil? %></dd>
+          <dt class="col-sm-4 mb-2">Downloads</dt>
+          <dd class="col-sm-8"><%= @mod.downloads_count %></dd>
+        </dl>
+      </div>
+    </div>
+    <hr />
+    <% if current_user.can_authenticate_to_factorio_api? %>
+      <%= form_for @new_mod, url: mods_path, method: :post do |f| %>
+        <%= f.hidden_field :name, value: @mod.name %>
+        <div class="row mb-4 justify-content-md-center">
+          <div class="col-auto">
+            <%= f.collection_select :factorio_server_id,
+                                   @available_servers,
+                                   :id,
+                                   :name,
+                                   { prompt: "Select a server" },
+                                   { class: "form-select", id: "factorio-server-select" } %>
+          </div>
+          <div class="col-auto">
+            <%= f.collection_select :version,
+                                   @mod.releases.sort_by(&:released_at).reverse,
+                                   :version,
+                                   :version,
+                                   { prompt: "Select a version" },
+                                   { class: "form-select", id: "version-select" } %>
+          </div>
+          <div class="col-auto">
+            <%= f.submit "Add to Server", class: "btn btn-primary" %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="alert alert-warning" role="alert">
+      <i class="bi bi-exclamation-diamond"></i> Set your Factorio.com username and token in <%= link_to "settings", edit_user_path(current_user) %> to download mods.
+      </div>
+    <% end %>
+    <% if @mod.description.present? %>
+      <hr />
+      <p class="card-text"><%= markdown(@mod.description) %></p>
+    <% end %>
+  </div>
+</div>

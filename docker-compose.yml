@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:14
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: factorio
+      POSTGRES_DB: factorio_manager_development
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.rails
+    volumes:
+      - .:/app
+      - factorio_data:/factorio_data
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - redis
+    environment:
+      DATABASE_URL: postgres://factorio:password@db/factorio_manager_development
+      REDIS_URL: redis://redis:6379/1
+      RAILS_ENV: development
+      FACTORIO_DATA_PATH: /factorio_data
+
+  sidekiq:
+    build:
+      context: .
+      dockerfile: Dockerfile.rails
+    command: bundle exec sidekiq
+    volumes:
+      - .:/app
+      - factorio_data:/factorio_data
+    depends_on:
+      - db
+      - redis
+      - web
+    environment:
+      DATABASE_URL: postgres://factorio:password@db/factorio_manager_development
+      REDIS_URL: redis://redis:6379/1
+      RAILS_ENV: development
+      FACTORIO_DATA_PATH: /factorio_data
+
+volumes:
+  postgres_data:
+  redis_data:
+  factorio_data:

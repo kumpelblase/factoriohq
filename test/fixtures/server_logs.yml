@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  factorio_server: one
+  level: MyString
+  message: MyText
+  timestamp: 2025-04-04 16:36:51
+
+two:
+  factorio_server: two
+  level: MyString
+  message: MyText
+  timestamp: 2025-04-04 16:36:51

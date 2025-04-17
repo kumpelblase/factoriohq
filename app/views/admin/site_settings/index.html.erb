@@ -1,0 +1,14 @@
+<div class="card">
+  <div class="card-header">
+    <h5 class="mb-1">Site Settings</h5>
+  </div>
+  <div class="card-body">
+    <%= form_with url: admin_site_settings_path, method: :patch do |f| %>
+      <div class="form-check mb-3">
+        <%= f.check_box :registrations_enabled, checked: @registration_enabled, class: "form-check-input" %>
+        <%= f.label :registrations_enabled, "Allow new user registrations", class: "form-check-label" %>
+      </div>
+      <%= f.submit "Save Settings", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>

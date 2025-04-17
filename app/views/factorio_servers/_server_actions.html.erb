@@ -1,0 +1,51 @@
+<div class="d-flex flex-wrap gap-2" id="server-actions">
+  <% if server.running? %>
+    <%= button_to stop_factorio_server_path(server),
+                 class: "btn btn-danger",
+                 data: { turbo: true },
+                 disabled: server.status == 'stopping' do %>
+      <% if server.status == 'stopping' %>
+        <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+      <% else %>
+        <i class="bi bi-stop"></i>
+      <% end %>
+      Stop Server
+    <% end %>
+  <% else %>
+    <%= button_to start_factorio_server_path(server),
+                 class: "btn btn-success",
+                 data: { turbo: true },
+                 disabled: server.status == 'starting' do %>
+      <% if server.status == 'starting' %>
+        <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+      <% else %>
+        <i class="bi bi-play"></i>
+      <% end %>
+      Start Server
+    <% end %>
+  <% end %>
+
+  <% if server.stopped? %>
+    <%= link_to "Edit Settings", edit_factorio_server_path(@server), class: "btn btn-warning" %>
+  <% end %>
+  <% if server.version == 'latest' || server.version.blank? %>
+    <%= link_to check_updates_factorio_server_path(server), class: "btn btn-info" do %>
+      Check for Updates
+    <% end %>
+  <% end %>
+  <% if server.stopped? %>
+    <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#versionModal">
+      Change Version
+    </button>
+    <%= link_to 'Manage Save Files', factorio_server_save_files_path(@server), class: 'btn btn-info' %>
+    <%= link_to 'Manage Mods', factorio_server_server_mods_path(@server), class: 'btn btn-info' %>
+  <% end %>
+
+  <%= button_to factorio_server_path(server),
+               method: :delete,
+               data: { confirm: "Are you sure you want to delete this server?" },
+               class: "btn btn-danger",
+               disabled: server.status == 'starting' || server.status == 'stopping' do %>
+    <i class="bi bi-trash3"></i> Delete Server
+  <% end %>
+</div>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html data-bs-theme="auto">
+  <head>
+    <title>FactorioHQ</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= turbo_refreshes_with method: :morph, scroll: :preserve  %>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <%= render 'shared/navbar' %>
+
+    <main class="container">
+      <%= render 'layouts/flash' %>
+
+      <%= yield %>
+    </main>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <%= yield :page_scripts %>
+    <script>
+    document.addEventListener('turbo:load', function() {
+      const savedTheme = localStorage.getItem('theme');
+
+      if (savedTheme) {
+        document.documentElement.setAttribute('data-bs-theme', savedTheme);
+        updateIcon(savedTheme);
+      } else {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-bs-theme', 'dark');
+          updateIcon('dark');
+        }
+      }
+
+      document.getElementById('btnSwitch').addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+        document.documentElement.setAttribute('data-bs-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+
+        updateIcon(newTheme);
+      });
+
+      function updateIcon(theme) {
+        const iconElement = document.getElementById('btnSwitch');
+        if (theme === 'dark') {
+          iconElement.classList.remove('bi-moon-fill');
+          iconElement.classList.add('bi-brightness-high-fill');
+        } else {
+          iconElement.classList.remove('bi-brightness-high-fill');
+          iconElement.classList.add('bi-moon-fill');
+        }
+      }
+    });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,58 @@
+<%= turbo_stream_from @servers %>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1>Your Factorio Servers</h1>
+  <%= link_to new_factorio_server_path, class: "btn btn-primary" do %>
+    <i class="bi bi-plus"></i> New Server
+  <% end %>
+</div>
+
+<% if @servers.empty? %>
+  <div class="card">
+    <div class="card-body text-center">
+      <p class="card-text text-muted">You don't have any Factorio servers yet.</p>
+      <p class="mt-4">
+        <%= link_to "Create your first server", new_factorio_server_path, class: "btn btn-primary" %>
+      </p>
+    </div>
+  </div>
+<% else %>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <% @servers.each do |server| %>
+      <div class="col">
+        <div class="card h-100">
+          <div class="card-header">
+            <h5 class="mb-1"><%= server.name %></h5>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <span class="badge <%= server.running? ? 'bg-success' : 'bg-secondary' %>">
+                <%= server.status.capitalize %>
+              </span>
+              <span class="ms-2 text-muted small">Port: <%= server.port %></span>
+              <% if server.mods.any? %>
+                <span class="ms-2 text-muted small">Mods: <%= server.mods.count %></span>
+              <% end %>
+            </div>
+
+            <p class="card-text text-truncate mb-4"><%= server.description %></p>
+
+            <div class="d-flex justify-content-between">
+              <%= link_to "Details", factorio_server_path(server), class: "btn btn-sm btn-outline-primary" %>
+              <div>
+                <% if server.running? %>
+                  <%= button_to stop_factorio_server_path(server), class: "btn btn-sm btn-danger" do %>
+                    <i class="bi bi-stop"></i> Stop
+                  <% end %>
+                <% else %>
+                  <%= button_to start_factorio_server_path(server), class: "btn btn-sm btn-success" do %>
+                    <i class="bi bi-play"></i> Start
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,256 @@
+<div class="">
+  <div class="">
+  <%= form_with(model: server) do |form| %>
+    <% if server.errors.any? %>
+      <div class="alert alert-danger">
+        <h2><%= pluralize(server.errors.count, "error") %> prohibited this server from being saved:</h2>
+        <ul>
+          <% server.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5>Basic Settings</h5>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <%= form.label :name, class: "form-label" %>
+          <%= form.text_field :name, class: "form-control" %>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :description, class: "form-label" %>
+          <%= form.text_area :description, class: "form-control" %>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <%= form.label :port, class: "form-label" %>
+            <%= form.number_field :port, class: "form-control" %>
+            <div class="form-text">
+              Must be different from all other servers on this machine.
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <%= form.label :rcon_port, class: "form-label" %>
+            <%= form.number_field :rcon_port, class: "form-control" %>
+            <div class="form-text">
+              Must be different from all other servers on this machine.
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <%= form.label :max_players, class: "form-label" %>
+            <%= form.number_field :max_players, class: "form-control" %>
+            <div class="form-text">Set to 0 for unlimited</div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <%= form.label :game_password, class: "form-label" %>
+            <%= form.text_field :game_password, class: "form-control" %>
+            <div class="form-text">Leave blank for no password</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5>Game Settings</h5>
+      </div>
+      <div class="card-body">
+        <div class="mb-3 form-check">
+          <%= form.check_box :enable_space_age, class: "form-check-input" %>
+          <%= form.label :enable_space_age, "Enable Space Age", class: "form-check-label" %>
+        </div>
+
+        <div class="mb-3 form-check">
+          <%= form.check_box :enable_elevated_rails, class: "form-check-input" %>
+          <%= form.label :enable_elevated_rails, "Enable Elevated Rails", class: "form-check-label" %>
+        </div>
+
+        <div class="mb-3 form-check">
+          <%= form.check_box :enable_quality, class: "form-check-input" %>
+          <%= form.label :enable_quality, "Enable Quality", class: "form-check-label" %>
+        </div>
+
+        <div class="mb-3 form-check">
+          <%= form.check_box :auto_update_mods, class: "form-check-input" %>
+          <%= form.label :auto_update_mods, "Auto Update Mods", class: "form-check-label" %>
+          <div class="form-text">
+            When the server starts should it automatically update all mods to the latest version?
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5>Visibility Settings</h5>
+      </div>
+      <div class="card-body">
+        <div class="mb-3 form-check">
+          <%= form.check_box :visibility_public, class: "form-check-input" %>
+          <%= form.label :visibility_public, "Public Visibility", class: "form-check-label" %>
+        </div>
+
+        <div class="mb-3 form-check">
+          <%= form.check_box :visibility_lan, class: "form-check-input" %>
+          <%= form.label :visibility_lan, "LAN Visibility", class: "form-check-label" %>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :token, "Authentication Token", class: "form-label" %>
+          <%= form.text_field :token, class: "form-control" %>
+          <div class="form-text">
+            Optional: Enter your authentication token from Factorio.com to list your server on the official server browser
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :tags, "Server Tags", class: "form-label" %>
+          <%= form.text_field :tags, class: "form-control" %>
+          <div class="form-text">
+            Enter up to 10 space-separated tags that describe your server. These will be visible in the server browser.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5>Multiplayer Settings</h5>
+      </div>
+      <div class="card-body">
+        <div class="mb-3 form-check">
+          <%= form.check_box :require_user_verification, class: "form-check-input" %>
+          <%= form.label :require_user_verification, class: "form-check-label" %>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <%= form.label :max_upload_in_kilobytes_per_second, "Max Upload (KB/s)", class: "form-label" %>
+            <%= form.number_field :max_upload_in_kilobytes_per_second, class: "form-control" %>
+            <div class="form-text">0 for unlimited</div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <%= form.label :max_upload_slots, class: "form-label" %>
+            <%= form.number_field :max_upload_slots, class: "form-control" %>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :minimum_latency_in_ticks, class: "form-label" %>
+          <%= form.number_field :minimum_latency_in_ticks, class: "form-control" %>
+        </div>
+
+        <div class="mb-3 form-check">
+          <%= form.check_box :ignore_player_limit_for_returning_players, class: "form-check-input" %>
+          <%= form.label :ignore_player_limit_for_returning_players, class: "form-check-label" %>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :allow_commands, class: "form-label" %>
+          <%= form.select :allow_commands,
+                         options_for_select([
+                           ["Admins Only", "admins-only"],
+                           ["Admins and Players", "admins-and-players"],
+                           ["No One", "no-commands"]
+                         ], server.allow_commands),
+                         {},
+                         { class: "form-select" } %>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :afk_autokick_interval, "AFK Autokick Interval (minutes)", class: "form-label" %>
+          <%= form.number_field :afk_autokick_interval, class: "form-control" %>
+          <div class="form-text">0 to disable</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5>Autosave Settings</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <%= form.label :autosave_interval, "Autosave Interval (minutes)", class: "form-label" %>
+            <%= form.number_field :autosave_interval, class: "form-control" %>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <%= form.label :autosave_slots, class: "form-label" %>
+            <%= form.number_field :autosave_slots, class: "form-control" %>
+          </div>
+        </div>
+
+        <div class="mb-3 form-check">
+          <%= form.check_box :auto_pause, class: "form-check-input" %>
+          <%= form.label :auto_pause, class: "form-check-label" %>
+        </div>
+
+        <div class="mb-3 form-check">
+          <%= form.check_box :only_admins_can_pause_the_game, class: "form-check-input" %>
+          <%= form.label :only_admins_can_pause_the_game, "Only Admins Can Pause", class: "form-check-label" %>
+        </div>
+
+        <div class="mb-3 form-check">
+          <%= form.check_box :autosave_only_on_server, class: "form-check-input" %>
+          <%= form.label :autosave_only_on_server, class: "form-check-label" %>
+        </div>
+
+        <div class="mb-3 form-check">
+          <%= form.check_box :non_blocking_saving, class: "form-check-input" %>
+          <%= form.label :non_blocking_saving, class: "form-check-label" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5>Advanced Network Settings</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <%= form.label :minimum_segment_size, class: "form-label" %>
+            <%= form.number_field :minimum_segment_size, class: "form-control" %>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <%= form.label :minimum_segment_size_peer_count, class: "form-label" %>
+            <%= form.number_field :minimum_segment_size_peer_count, class: "form-control" %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <%= form.label :maximum_segment_size, class: "form-label" %>
+            <%= form.number_field :maximum_segment_size, class: "form-control" %>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <%= form.label :maximum_segment_size_peer_count, class: "form-label" %>
+            <%= form.number_field :maximum_segment_size_peer_count, class: "form-control" %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <%= link_to "Cancel", server, class: "btn btn-secondary me-md-2" if server.persisted? %>
+      <%= form.submit class: "btn btn-primary" %>
+    </div>
+  <% end %>
+  </div>
+</div>

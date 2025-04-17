@@ -1,0 +1,27 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1>Settings</h1>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header">
+    <h5>Factorio.com Information</h5>
+  </div>
+  <div class="card-body">
+    <p>To download mods from the Factorio Mod API, you need to provide your Factorio.com username and token.</p>
+    <%= form_with(model: current_user, url: user_path(current_user), method: :patch, local: true) do |form| %>
+      <div class="mb-3">
+        <%= form.label :factorio_username, "Factorio Username", class: "form-label" %>
+        <%= form.text_field :factorio_username, class: "form-control" %>
+      </div>
+
+      <div class="mb-3">
+        <%= form.label :factorio_token, "Factorio Token", class: "form-label" %>
+        <%= form.text_field :factorio_token, class: "form-control" %>
+      </div>
+
+      <div class="actions">
+        <%= form.submit "Save", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

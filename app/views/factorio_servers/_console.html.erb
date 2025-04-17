@@ -1,0 +1,87 @@
+<div class="card mb-4">
+  <div class="card-header">
+    <h5 class="mb-1">RCON Console</h5>
+  </div>
+  <div class="card-body">
+    <div class="rcon-console-output mb-3" id="console-output" style="height: 300px; overflow-y: auto; background-color: #1e1e1e; color: #f0f0f0; padding: 10px; font-family: monospace;">
+      <div class="text-muted">RCON console ready. Type commands below.</div>
+    </div>
+
+    <% if server.running? %>
+      <div class="input-group">
+        <input type="text" id="rcon-command" class="form-control" placeholder="Enter command..." aria-label="RCON command">
+        <button class="btn btn-primary" type="button" id="send-command-btn">Send</button>
+      </div>
+      <div class="form-text mt-1">
+        Example commands: /players, /help, /version
+      </div>
+    <% else %>
+      <div class="alert alert-warning mb-0">
+        <i class="bi bi-exclamation-diamond"></i> Server must be running to use the RCON console.
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<% content_for :page_scripts do %>
+  <script>
+    document.addEventListener('turbo:load', function() {
+      const commandInput = document.getElementById('rcon-command');
+      const sendButton = document.getElementById('send-command-btn');
+      const consoleOutput = document.getElementById('console-output');
+
+      if (commandInput && sendButton) {
+        function addToConsole(text, isCommand = false) {
+          const line = document.createElement('div');
+          if (isCommand) {
+            line.innerHTML = `<span style="color: #4CAF50;">></span> <span style="color: #9CDCFE;">${text}</span>`;
+          } else {
+            line.textContent = text;
+          }
+          consoleOutput.appendChild(line);
+          consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+
+        function sendCommand() {
+          const command = commandInput.value.trim();
+          if (!command) return;
+
+          addToConsole(command, true);
+          commandInput.value = '';
+
+          fetch('<%= console_factorio_server_path(@server) %>', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({ command: command })
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              if (data.response) {
+                addToConsole(data.response);
+              } else {
+                addToConsole('Command executed successfully (no response)');
+              }
+            } else {
+              addToConsole(`Error: ${data.error}`, false);
+            }
+          })
+          .catch(error => {
+            addToConsole(`Error: ${error.message}`, false);
+          });
+        }
+
+        sendButton.addEventListener('click', sendCommand);
+        commandInput.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            sendCommand();
+          }
+        });
+      }
+    });
+  </script>
+<% end %>

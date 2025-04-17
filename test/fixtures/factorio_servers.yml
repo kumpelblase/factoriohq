@@ -1,0 +1,33 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  description: MyText
+  port: 1
+  rcon_port: 1
+  rcon_password: MyString
+  max_players: 1
+  game_password: MyString
+  admin_password: MyString
+  auto_start: false
+  docker_container_id: MyString
+  status: MyString
+  version: MyString
+  save_file: MyString
+  user: one
+
+two:
+  name: MyString
+  description: MyText
+  port: 1
+  rcon_port: 1
+  rcon_password: MyString
+  max_players: 1
+  game_password: MyString
+  admin_password: MyString
+  auto_start: false
+  docker_container_id: MyString
+  status: MyString
+  version: MyString
+  save_file: MyString
+  user: two
