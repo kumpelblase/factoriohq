@@ -12,6 +12,15 @@ FactorioHQ is a web application for managing Factorio game servers using Docker 
 - Manage server mods
 - Uses the [factoriotools](https://hub.docker.com/r/factoriotools/factorio/) Docker image to run game servers
 
+#### Manage Multiple Servers
+![Manage Multiple Servers](screenshots/factoriohq-servers.png)
+
+#### Configure Server Settings
+![Configure Server Settings](screenshots/factoriohq-server-details.png)
+
+#### Manage Mods
+![Manage Mods](screenshots/factoriohq-mods.png)
+
 ## Requirements
 
 - Ruby 3.2.4
