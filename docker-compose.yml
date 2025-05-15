@@ -21,7 +21,7 @@ services:
 
   web:
     build:
-      dockerfile: ./Dockerfile.rails
+      dockerfile: ./Dockerfile
     volumes:
       - .:/app
       - factorio_data:/factorio_data
@@ -38,7 +38,7 @@ services:
 
   sidekiq:
     build:
-      dockerfile: ./Dockerfile.rails
+      dockerfile: ./Dockerfile
     command: bundle exec sidekiq
     volumes:
       - .:/app
